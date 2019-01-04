@@ -41,3 +41,4 @@ for anime in animeFile:
             functions.downloadAndOpen(url, fileName)
         else:
             break
+driver.close()
