@@ -17,26 +17,27 @@ showsPage = requests.get(URL + "/shows/")
 ####### TODO: implement recovery mechanism
 if showsPage.status_code != 200:
     exit(0)
+#######
+print("entered shows page!")
 showsPageSoup = BeautifulSoup(showsPage.content, "html.parser")
 for anime in animeFile:
     animeName = anime.replace("\n", "")
+    print("Scanning " + animeName + ":")
     link = showsPageSoup.find("a", title= animeName)
-    animePage = requests.get(URL + link.get('href'))
+
     ####### TODO: implement recovery mechanism
-    if animePage.status_code != 200:
-        exit(0)
     driver.get(URL + link.get('href'))
+    ######
     time.sleep(5)
-    print("got site")####################################################################deleteME
+    print("    got " + animeName + " site")####################################################################deleteME
     p_element = driver.find_element_by_class_name("hs-shows")
     for element in p_element.find_elements_by_class_name("rls-info-container"):
+        # download episodes that were uploaded today
         if element.find_element_by_class_name("rls-date").text == "Today":
-            print("im in")
             element.find_element_by_class_name("rls-date").click()
             time.sleep(5)
             url = element.find_elements_by_class_name("rls-link")[2].find_elements_by_class_name("dl-type")[1].find_element_by_tag_name("a").get_attribute("href")
             fileName = animeName + element.find_element_by_tag_name("strong").text + ".torrent" #anime name + number
-            print("downloading" + fileName + " - " + url)
             functions.downloadAndOpen(url, fileName)
         else:
             break
