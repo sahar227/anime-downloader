@@ -7,7 +7,7 @@ OriginDirName = os.path.dirname(__file__)
 DownloadLogsDirName = OriginDirName + '/downloadLogs/'
 TorrentsDirName = OriginDirName + '/torrents/'
 animeFile = open("C:\\Users\\Sahar\\Documents\\Projects\\visual studio 2017\\AnimeDL GUI\\AnimeDL GUI\\bin\\Debug\\animeList.txt","r")
-date = time = datetime.datetime.today().strftime('%d-%m-%Y')
+date = datetime.datetime.today().strftime('%d-%m-%Y')
 
 def downloadAndOpen(url, file_name):
     logFile = open(DownloadLogsDirName + date + '.txt', "a+")
@@ -44,4 +44,5 @@ def HasDownloaded(episodeName):
     logFile.close()
     return False
 
+# test download works properly
 #downloadAndOpen("https://nyaa.si/view/1107218/torrent", "Boogiepop wa Warawanai (2019)01.torrent")
