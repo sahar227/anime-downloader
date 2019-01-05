@@ -1,3 +1,4 @@
 *.torrent
 Project/.idea/workspace.xml
 Project/__pycache__/functions.cpython-36.pyc
+Project/downloadLogs/
