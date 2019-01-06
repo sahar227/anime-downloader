@@ -19,8 +19,9 @@ for anime in consts.animeFile:
         fileName = animeName + " " + element.find_element_by_tag_name(consts.EpisodeNumberTag).text + ".torrent"  # anime name + number.torrent
         # download episodes that were uploaded today and were not already downloaded
         if element.find_element_by_class_name(consts.ReleaseDateClass).text == "Today" and not Utils.HasDownloaded(fileName):
-            element.find_element_by_class_name(consts.ReleaseDateClass).click()
+            element.find_element_by_class_name(consts.ReleaseDateClass).click() # click to reveal episode links
             time.sleep(5)
+            # find our link
             url = element.find_elements_by_class_name(consts.QualityOptionsClass)[consts.QualityDictionary["1080p"]].find_elements_by_class_name(consts.DownloadMirrorsClass)[consts.torrentIndex].find_element_by_tag_name("a").get_attribute("href")
             Utils.downloadAndOpen(url, fileName)
         else:
