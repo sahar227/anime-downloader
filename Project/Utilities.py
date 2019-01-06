@@ -1,16 +1,17 @@
-import datetime
 import os
+from bs4 import BeautifulSoup
 from requests import get
+import Constants as consts
 
-# Global variables
-OriginDirName = os.path.dirname(__file__)
-DownloadLogsDirName = OriginDirName + '/downloadLogs/'
-TorrentsDirName = OriginDirName + '/torrents/'
-animeFile = open("C:\\Users\\Sahar\\Documents\\Projects\\visual studio 2017\\AnimeDL GUI\\AnimeDL GUI\\bin\\Debug\\animeList.txt","r")
-date = datetime.datetime.today().strftime('%d-%m-%Y')
+# finds the page with links to all existing anime shows
+def getIndexPage():
+    showsPage = get(consts.URL + "/shows/")
+    ####### TODO: implement recovery mechanism
+    print("entered shows page!")
+    return BeautifulSoup(showsPage.content, "html.parser")
 
+# downloads and opens file
 def downloadAndOpen(url, file_name):
-    logFile = open(DownloadLogsDirName + date + '.txt', "a+")
     print("        downloading " + file_name + " - " + url)
     try:
         response = get(url)
@@ -19,30 +20,23 @@ def downloadAndOpen(url, file_name):
         downloadAndOpen(url, file_name)
         return False
 
-    with open(TorrentsDirName + file_name, "wb") as file:
+    with open(consts.TorrentsDirPath + file_name, "wb") as file:
         # write to file
         file.write(response.content)
         print("        downloaded successfully")
+        logFile = open(consts.LogsDirPath + consts.date + '.txt', "a+")
         logFile.write(file_name + "\n")
         # Open file
-        os.startfile(TorrentsDirName + file_name)
+        os.startfile(consts.TorrentsDirPath + file_name)
         print("opened")
     logFile.close()
 
 # Checks if logs already registered this episode
 ##### TODO: in the future, should be used on Json file!
 def HasDownloaded(episodeName):
-    try:
-        logFile = open(OriginDirName + '/downloadLogs/' + date + '.txt', "r")
-    except:# file doesn't exist
-        return False
-    for line in logFile:
-        if episodeName in line:
-            logFile.close()
-            print("file " + episodeName + " already downloaded")
-            return True
-    logFile.close()
+    if(consts.logFile != None):
+        for line in consts.logFile:
+            if episodeName in line:
+                print("file " + episodeName + " already downloaded")
+                return True
     return False
-
-# test download works properly
-#downloadAndOpen("https://nyaa.si/view/1107218/torrent", "Boogiepop wa Warawanai (2019)01.torrent")
