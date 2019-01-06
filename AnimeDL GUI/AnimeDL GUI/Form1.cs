@@ -18,27 +18,8 @@ namespace AnimeDL_GUI
         public Form1()
         {
             InitializeComponent();
-            try
-            {
-                // Create an instance of StreamReader to read from a file.
-                // The using statement also closes the StreamReader.
-                using (StreamReader sr = new StreamReader(animeListFile))
-                {
-                    string line;
-
-                    // Read and display lines from the file until 
-                    // the end of the file is reached. 
-                    while ((line = sr.ReadLine()) != null)
-                    {
-                        animeList.Items.Add(line);
-                    }
-                }
-
-            }
-            catch
-            {
-
-            }
+            ConfigurationData conf = new ConfigurationData();
+            animeList.Items.AddRange(conf.animeList.ToArray());
         }
 
         private void button1_Click(object sender, EventArgs e)
