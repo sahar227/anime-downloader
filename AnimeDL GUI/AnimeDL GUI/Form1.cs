@@ -10,21 +10,56 @@ using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
 
+using Newtonsoft.Json;
+
+
 namespace AnimeDL_GUI
 {
     public partial class Form1 : Form
     {
-        const string animeListFile = "animeList.txt";
+        public const string configurationFile = "configuration.json";
+        ConfigurationData conf;
+
+        private ConfigurationData LoadJson(string jsonFile)
+        {
+            try
+            {
+                using (StreamReader r = new StreamReader(jsonFile))
+                {
+                    string json = r.ReadToEnd();
+                    return JsonConvert.DeserializeObject<ConfigurationData>(json);
+                }
+            }
+            catch
+            {
+                return new ConfigurationData();
+            }
+        }
+
+        void LoadQuality(string quality)
+        {
+            switch (quality)
+            {
+                case "480p": { RB480p.Select(); break; }
+                case "720p": { RB720p.Select(); break; }
+                case "1080p": { RB1080p.Select(); break; }
+                default: break;
+            }
+        }
+
         public Form1()
         {
             InitializeComponent();
-            ConfigurationData conf = new ConfigurationData();
+            conf = LoadJson(configurationFile);
+
             animeList.Items.AddRange(conf.animeList.ToArray());
+            LoadQuality(conf.quality);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             animeList.Items.Add(animeInput.Text.ToString());
+            conf.animeList.Add(animeInput.Text.ToString());
             animeInput.Text = "";
         }
 
@@ -43,29 +78,25 @@ namespace AnimeDL_GUI
             animeList.Items.RemoveAt(animeList.SelectedIndex);
         }
 
-        bool SaveToFile(ListBox list)
+        private void ExportConfigToJson(ConfigurationData a_config)
         {
-            using (StreamWriter sw = new StreamWriter(animeListFile))
-            {
-                foreach(string s in list.Items)
-                    sw.WriteLine(s);
-            }
-            return true;
+            string json = JsonConvert.SerializeObject(a_config);
+            System.IO.File.WriteAllText(configurationFile, json);
         }
 
         private void SaveList_Click(object sender, EventArgs e)
         {
-            SaveToFile(animeList);
+            ExportConfigToJson(conf);
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-
+            conf.quality = RB480p.Text;
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
-
+            conf.quality = RB720p.Text;
         }
 
 
@@ -92,6 +123,11 @@ namespace AnimeDL_GUI
         private void download_Click(object sender, EventArgs e)
         {
             //run_cmd();
+        }
+
+        private void RB1080p_CheckedChanged(object sender, EventArgs e)
+        {
+            conf.quality = RB1080p.Text;
         }
     }
 }
