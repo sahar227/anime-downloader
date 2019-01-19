@@ -75,6 +75,7 @@ namespace AnimeDL_GUI
 
         private void removeButton_Click(object sender, EventArgs e)
         {
+            conf.animeList.RemoveAt(animeList.SelectedIndex);
             animeList.Items.RemoveAt(animeList.SelectedIndex);
         }
 
