@@ -58,8 +58,12 @@ namespace AnimeDL_GUI
 
         private void button1_Click(object sender, EventArgs e)
         {
-            animeList.Items.Add(animeInput.Text.ToString());
-            conf.animeList.Add(animeInput.Text.ToString());
+            string adjustedText = animeInput.Text.ToString();
+            // some characters don't work well with python script
+            adjustedText = adjustedText.Replace('–', '-');
+            adjustedText = adjustedText.Replace('’', '\'');
+            animeList.Items.Add(adjustedText);
+            conf.animeList.Add(adjustedText);
             animeInput.Text = "";
         }
 
