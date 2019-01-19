@@ -1,3 +1,4 @@
+import sys
 import time
 import Utilities as Utils
 import Constants as consts
@@ -33,3 +34,5 @@ for anime in consts.animeList:
             break
 
 consts.CloseFiles()
+print("All done!")
+sys.exit()

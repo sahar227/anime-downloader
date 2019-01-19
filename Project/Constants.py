@@ -12,6 +12,7 @@ TorrentsDirName = "torrents"
 # Web driver configuration
 chrome_options = Options()
 chrome_options.add_argument("--headless")
+chrome_options.add_argument('log-level=3')
 
 #WebScrape hard-coded values
 URL = "https://horriblesubs.info"
@@ -21,14 +22,14 @@ EpisodeNumberTag = "strong"
 ReleaseDateClass = "rls-date"
 QualityOptionsClass = "rls-link"
 DownloadMirrorsClass = "dl-type"
-torrentIndex = 0 # use magnet link
+torrentIndex = 1 # use torrent link
 QualityDictionary = {"480p" : 0, "720p" : 1, "1080p" : 2}
 
 
 # Initialize constants
 OriginDirPath = os.path.dirname(__file__)
-LogsDirPath = OriginDirPath + '/' + LogsDirName + '/'
-TorrentsDirPath = OriginDirPath + '/' + TorrentsDirName + '/'
+LogsDirPath = OriginDirPath + '\\' + LogsDirName + '\\'
+TorrentsDirPath = OriginDirPath + '\\' + TorrentsDirName + '\\'
 date = datetime.datetime.today().strftime('%d-%m-%Y')
 
 # open files
@@ -46,12 +47,13 @@ except:
     logFile = None
 driver = webdriver.Chrome(chrome_options=chrome_options)
 
+
 configuration = json.load(configurationFile)
 animeList = configuration["animeList"]
 quality = configuration["quality"]
 
 def CloseFiles():
     configurationFile.close()
-    driver.close()
+    driver.quit()
     if(logFile != None):
         logFile.close()
