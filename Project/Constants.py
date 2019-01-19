@@ -46,7 +46,7 @@ except:
     logFile = None
 driver = webdriver.Chrome(chrome_options=chrome_options)
 
-configuration =  json.load(configurationFile)
+configuration = json.load(configurationFile)
 animeList = configuration["animeList"]
 quality = configuration["quality"]
 
