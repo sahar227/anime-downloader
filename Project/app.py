@@ -4,13 +4,18 @@ import Constants as consts
 
 
 showsPageSoup = Utils.getIndexPage()
-for anime in consts.animeFile:
+for anime in consts.animeList:
     animeName = anime.replace("\n", "")
     print("Scanning " + animeName + ":")
-    link = showsPageSoup.find("a", title= animeName)
+
+    link = showsPageSoup.find("a", title=animeName)
 
     ####### TODO: implement recovery mechanism
-    consts.driver.get(consts.URL + link.get('href'))
+    try:
+        consts.driver.get(consts.URL + link.get('href'))
+    except:
+        print("No anime called " + anime + " found")
+        continue
     ######
     time.sleep(5)
     print("    got " + animeName + " site")
@@ -22,7 +27,7 @@ for anime in consts.animeFile:
             element.find_element_by_class_name(consts.ReleaseDateClass).click() # click to reveal episode links
             time.sleep(5)
             # find our link
-            url = element.find_elements_by_class_name(consts.QualityOptionsClass)[consts.QualityDictionary["1080p"]].find_elements_by_class_name(consts.DownloadMirrorsClass)[consts.torrentIndex].find_element_by_tag_name("a").get_attribute("href")
+            url = element.find_elements_by_class_name(consts.QualityOptionsClass)[consts.QualityDictionary[consts.quality]].find_elements_by_class_name(consts.DownloadMirrorsClass)[consts.torrentIndex].find_element_by_tag_name("a").get_attribute("href")
             Utils.downloadAndOpen(url, fileName)
         else:
             break

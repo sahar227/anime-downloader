@@ -1,5 +1,6 @@
 import os
 import datetime
+import json
 from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 
@@ -20,7 +21,7 @@ EpisodeNumberTag = "strong"
 ReleaseDateClass = "rls-date"
 QualityOptionsClass = "rls-link"
 DownloadMirrorsClass = "dl-type"
-torrentIndex = 1
+torrentIndex = 0 # use magnet link
 QualityDictionary = {"480p" : 0, "720p" : 1, "1080p" : 2}
 
 
@@ -33,7 +34,8 @@ date = datetime.datetime.today().strftime('%d-%m-%Y')
 # open files
 # temporary hard-coded path. Needs to change to relative path!
 try:
-    animeFile = open("C:\\Users\\Sahar\\Documents\\Projects\\anime-downloader\\AnimeDL GUI\\AnimeDL GUI\\bin\\Debug\\animeList.txt", "r")
+    configurationFile = open("C:\\Users\\Sahar\\Documents\\Projects\\anime-downloader\\AnimeDL GUI\\AnimeDL GUI\\bin\\Debug\\configuration.json", "r")
+
 except:# configuration file does not exist
     print("Please use anime-downloader GUI to setup the program")
     exit()
@@ -44,8 +46,12 @@ except:
     logFile = None
 driver = webdriver.Chrome(chrome_options=chrome_options)
 
+configuration =  json.load(configurationFile)
+animeList = configuration["animeList"]
+quality = configuration["quality"]
+
 def CloseFiles():
-    animeFile.close()
+    configurationFile.close()
     driver.close()
     if(logFile != None):
         logFile.close()
